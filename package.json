@@ -1,5 +1,5 @@
 {
-  "name": "@pilotconway/react-request-hook",
+  "name": "@riledupco/react-request-hook",
   "productName": "react-request-hook",
   "version": "0.1.0-alpha4",
   "description": "Library for communicating with a RESTful server using React Hooks.",
