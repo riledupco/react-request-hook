@@ -11,9 +11,6 @@
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "peerDependencies": {
     "prop-types": "15.7.2",
     "react": "16.8.6",
