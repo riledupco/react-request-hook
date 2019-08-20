@@ -8,6 +8,7 @@
   "module": "dist/esm/index.js",
   "browser": "./dist/react-request-hook.umd.js",
   "keywords": [],
+  "license": "MIT",
   "files": [
     "dist"
   ],
