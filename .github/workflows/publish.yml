@@ -33,23 +33,21 @@ jobs:
           registry-url: https://registry.npmjs.org/
       - run: yarn
       - run: yarn build
-      - run: cd dist/ 
-      - run: npm publish --access public
+      - run: cd dist/ && npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
-
-  publish-gpr:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 12
-          registry-url: https://npm.pkg.github.com/
-          scope: '@riledupco'
-      - run: yarn
-      - run: yarn build
-      - run: cd dist/ && yarn publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.GITHUB_PACKAGE_REGISTRY_TOKEN}}
+  # publish-gpr:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v1
+  #     - uses: actions/setup-node@v1
+  #       with:
+  #         node-version: 12
+  #         registry-url: https://npm.pkg.github.com/
+  #         scope: '@riledupco'
+  #     - run: yarn
+  #     - run: yarn build
+  #     - run: cd dist/ && yarn publish
+  #       env:
+  #         NODE_AUTH_TOKEN: ${{secrets.GITHUB_PACKAGE_REGISTRY_TOKEN}}
