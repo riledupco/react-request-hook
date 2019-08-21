@@ -33,7 +33,11 @@ class WrappedClient {
    * @returns {string} Full base URL
    */
   buildBaseUrl(baseUrl) {
-    const windowUrl = ((window || {}).location || {}).origin || 'http://localhost';
+    let w = {};
+    if (typeof window !== 'undefined') {
+      w = window;
+    }
+    const windowUrl = ((w || {}).location || {}).origin || 'http://localhost';
     if (typeof baseUrl === 'undefined') {
       return windowUrl;
     }
