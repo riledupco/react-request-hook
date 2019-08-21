@@ -1,8 +1,4 @@
-
-<p>
-  <a href="https://github.com/riledupco/react-request-hook/actions"><img alt="GitHub Actions status" src="https://github.com/riledupco/react-request-hook/workflows/Build/badge.svg"></a>
-</p>
-
+[![Build Status](https://github.com/riledupco/react-request-hook/workflows/Build/badge.svg)](https://github.com/riledupco/react-request-hook/actions)
 [![codecov](https://codecov.io/gh/riledupco/react-request-hook/branch/master/graph/badge.svg)](https://codecov.io/gh/riledupco/react-request-hook)
 [![npm package](https://img.shields.io/npm/v/@riledupco/react-request-hook/latest.svg)](https://www.npmjs.com/package/@riledupco/react-request-hook)
 
