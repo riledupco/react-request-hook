@@ -4,6 +4,22 @@ const linkParseRegex = /<(.+?)>; rel="(.*)"/;
 const emptyLinks = { first: null, last: null, prev: null, next: null };
 
 /**
+ * Returns the string of an HTTP status code.
+ * @param {int} httpCode HTTP Code, eg, 404
+ * @return {string} The coresponding statusText for that http code.
+ */
+function getStatusTextForCode(httpCode) {
+  switch (httpCode) {
+    case 400:
+      return 'Bad Request';
+    case 500:
+      return 'Internal Server Error';
+    default:
+      return null;
+  }
+}
+
+/**
  * Processes the Link header and splits the data into the two links
  * and returns the links in an array.
  * @param {*} response The response from the server which contains the xhr request.
@@ -69,6 +85,7 @@ function processError(error) {
         (error.response.data || {}).message ||
         ((error.response.data || {}).error || {}).message ||
         error.response.statusText ||
+        getStatusTextForCode(error.response.status) ||
         null,
     };
   } else if (error.request) {
