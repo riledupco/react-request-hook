@@ -81,7 +81,7 @@ import React from 'react';
 import { useEndpointData } from '@riledupco/react-request-hook`;
 
 export default function MyComponent() {
-  const [ data, loading, error, links, client ] = useEndpointHooks('/users', { params: { per_page: 5 }});
+  const [ data, loading, error, links, client ] = useEndpointData('/users', { params: { per_page: 5 }});
   return (
     ... your component jsx
   )
