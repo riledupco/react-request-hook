@@ -1,4 +1,5 @@
 import axios from 'axios';
+import xhr from 'axios/lib/adapters/xhr';
 
 const linkParseRegex = /<(.+?)>; rel="(.*)"/;
 const emptyLinks = { first: null, last: null, prev: null, next: null };
@@ -180,6 +181,25 @@ const client = {
 
     try {
       const response = await axiosInstance.post(path, data, options);
+      return {
+        ok: true,
+        ...response,
+      };
+    } catch (error) {
+      return processError(error);
+    }
+  },
+
+  postMultipart: async (path, file, options, instance) => {
+    const axiosInstance = instance || axios;
+    const opts = { ...options };
+    opts.adapter = xhr;
+
+    const data = new FormData();
+    data.append('file', file);
+
+    try {
+      const response = await axiosInstance.post(path, data, opts);
       return {
         ok: true,
         ...response,
