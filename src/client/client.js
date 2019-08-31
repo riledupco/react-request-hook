@@ -189,7 +189,33 @@ const client = {
       return processError(error);
     }
   },
-
+  /**
+   * Runs a POST operation on the provided path and returns the data, but before
+   * sending will convert data into a FormData object to send as a postMultipart
+   * message.
+   *
+   * Note: Will always use axios xhr instance for this request since http
+   * can't use FormMultipart.
+   *
+   * @param {string} path The complete URL of the endpoint to post.
+   * @param {object} data The data/file to post to the server as FormData.
+   * @param {object} options Options for the request. See
+   *  https://github.com/axios/axios#request-config for all valid properties that can be sent
+   *  in the options object.
+   * @param {object} options.params Key/value pairs of parameters to pass to the request.
+   * @param {object} options.headers Key/value pairs of headers to set on the request
+   * @param {axios} instance (optional) Used to pass a custom axios instance to use instead of the
+   *  global one.
+   *
+   * @return {object} With the following properties:
+   *  * {boolean} ok False if the response contains an error.
+   *  * {number} status The http status code of the response.
+   *  * {string} statusText A message if provided to describe the status response. Null if none
+   *  *               was supplied.
+   *  * {object|array} data The data from the server.
+   *  * See [https://github.com/axios/axios#response-schema]() for other properties sent in the
+   *    request object.
+   */
   postMultipart: async (path, file, options, instance) => {
     const axiosInstance = instance || axios;
     const opts = { ...options };

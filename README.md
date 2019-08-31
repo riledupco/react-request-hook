@@ -1,4 +1,3 @@
-
 <p>
   <a href="https://github.com/riledupco/react-request-hook/actions"><img alt="GitHub Actions status" src="https://github.com/riledupco/react-request-hook/workflows/Build/badge.svg"></a>
 </p>
@@ -105,11 +104,99 @@ The `client` object contains 4 functions that can be used to communicate with th
 - get
 - put
 - post
+- postMultipart
 - delete
 
 ##### get()
 
-Performs a get request to the server.
+Runs a GET operation on the provided path and returns the data.
+
+Parameters:
+
+- `path` _(string)_ The complete URL of the endpoint to post.
+- `options` _(object)_ Options for the request. See
+  https://github.com/axios/axios#request-config for all valid properties that can be sent in the options object.
+  - `.params` _(object)_ Key/value pairs of parameters to pass to the request.
+  - `.headers` _(object)_ Key/value pairs of headers to set on the request
+- `instance` _(axios)_ (optional) Used to pass a custom axios instance to use instead of the global one.
+
+Return:
+
+- _(object)_ With the following properties:
+
+  - `ok` _(boolean)_ False if the response contains an error.
+  - `status` _(number)_ The http status code of the response.
+  - `statusText` _(string)_ statusText A message if provided to describe the status response. Null if none was supplied.
+  - `data` _(object|array)_ The data from the server.
+  - `links` _(object)_ The links object containing any link header URLS. All properties are guranteed to be present, but will be set to null if the link does not exist in the header. Otherwise, it will be set to the string URL value.
+
+    - `next` _(string)_ The URL to get the next page.
+    - `prev` _(string)_ The URL to get the previous page.
+    - `first` _(string)_ The URL to get the first page.
+    - `last` _(string)_ The URL to get the last page.
+
+See [https://github.com/axios/axios#response-schema]() for other properties sent in the request object..
+
+##### put()
+
+Performs a PUT request to the server.
+
+##### post()
+
+Runs a POST operation on the provided path and returns the data.
+
+Parameters:
+
+- `path` _(string)_ The complete URL of the endpoint to post.
+- `data` _(object)_ The data to post to the server.
+- `options` _(object)_ Options for the request. See
+  https://github.com/axios/axios#request-config for all valid properties that can be sent in the options object.
+  - `.params` _(object)_ Key/value pairs of parameters to pass to the request.
+  - `.headers` _(object)_ Key/value pairs of headers to set on the request
+- `instance` _(axios)_ (optional) Used to pass a custom axios instance to use instead of the global one.
+
+Return:
+
+- _(object)_ With the following properties:
+  - `ok` _(boolean)_ False if the response contains an error.
+  - `status` _(number)_ The http status code of the response.
+  - `statusText` _(string)_ statusText A message if provided to describe the status response. Null if none was supplied.
+  - `data` _(object|array)_ The data from the server.
+
+See [https://github.com/axios/axios#response-schema]() for other properties sent in the request object..
+
+##### postMultipart()
+
+Performs a POST request to the server.
+
+Runs a POST operation on the provided path and returns the data, but before sending will convert data into a FormData object to send as a postMultipart message.
+
+Note: Will always use axios xhr instance for this request since http
+can't use FormMultipart.
+
+Parameters:
+
+- `path` _(string)_ The complete URL of the endpoint to post.
+- `data` _(object)_ The data/file to post to the server as FormData.
+- `options` _(object)_ Options for the request. See
+  https://github.com/axios/axios#request-config for all valid properties that can be sent in the options object.
+  - `.params` _(object)_ Key/value pairs of parameters to pass to the request.
+  - `.headers` _(object)_ Key/value pairs of headers to set on the request
+- `instance` _(axios)_ (optional) Used to pass a custom axios instance to use instead of the global one.
+
+Return:
+
+- _(object)_ With the following properties:
+  - `ok` _(boolean)_ False if the response contains an error.
+  - `status` _(number)_ The http status code of the response.
+  - `statusText` _(string)_ statusText A message if provided to describe the status response. Null if none was supplied.
+  - `data` _(object|array)_ The data from the server.
+
+See [https://github.com/axios/axios#response-schema]() for other properties sent in the request object.
+
+##### delete()
+
+Performs a DELETE request to the server.
 
 ### `createClient`
 
