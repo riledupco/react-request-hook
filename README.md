@@ -1,8 +1,6 @@
-<p>
-  <a href="https://github.com/riledupco/react-request-hook/actions"><img alt="GitHub Actions status" src="https://github.com/riledupco/react-request-hook/workflows/Build/badge.svg"></a>
-</p>
-
+[![Build Status](https://github.com/riledupco/react-request-hook/workflows/Build/badge.svg)](https://github.com/riledupco/react-request-hook/actions)
 [![codecov](https://codecov.io/gh/riledupco/react-request-hook/branch/master/graph/badge.svg)](https://codecov.io/gh/riledupco/react-request-hook)
+[![npm package](https://img.shields.io/npm/v/@riledupco/react-request-hook/latest.svg)](https://www.npmjs.com/package/@riledupco/react-request-hook)
 
 # react-request-hook
 
@@ -24,8 +22,7 @@ api.
 
 ```js
 ...
-import { createClient } from 'src/client';
-import ClientProvider from 'src/ClientProvider';
+import { ClientProvider, createClient } from '@riledupco/react-request-hook';
 ...
 
 function Root() {
@@ -42,6 +39,10 @@ You can also use a full URL when calling the hooks or using the `Request` compon
 the url as provided to make the call.
 
 ```js
+import { Request } from '@riledupco/react-request-hook`;
+
+...
+
 <Request endpoint="https://api.github.com/users?per_page=5">
   {({ loading, error, data, links }) => (
     ...
@@ -77,10 +78,10 @@ The library provides the `useEndpointData` hook to make a GET request to an endp
 
 ```js
 import React from 'react';
-import useEndpointData from 'src/useEndpointData`;
+import { useEndpointData } from '@riledupco/react-request-hook`;
 
 export default function MyComponent() {
-  const [ data, loading, error, links, client ] = useEndpointHooks('/users', { params: { per_page: 5 }});
+  const [ data, loading, error, links, client ] = useEndpointData('/users', { params: { per_page: 5 }});
   return (
     ... your component jsx
   )
@@ -96,6 +97,10 @@ See [`useEndpointData`](#useEndpointData) for details on the hook parameters and
 This is base object that is used to make requests to the server. It is recommended that you do not create this object but instead use `createClient` to create a new client.
 
 Both `Request` and `useEndpointData` will also provide the client object so you can use it to make other requests to the server such as a put/post/delete.
+```
+
+import client from '@riledupco/react-request-hook/client';
+```
 
 #### Functions
 
@@ -202,6 +207,10 @@ Performs a DELETE request to the server.
 
 This function creates a new client. It's preferred over using `client` itself as you can set the base URL and headers using `createClient` where with `client` you will have to pass full URLs to every request.
 
+```
+import { createClient } from '@riledupco/react-request-hook';
+```
+
 ### `<ClientProvider>`
 
 The ClientProvider allows for a client to be set as the default client for all requests in the component tree below the provider. You can use [`createClient`](#createClient) to create a client with a specific base url then use relative endpoints in all `Request` or `useEndpointData` calls to get information from the server.
@@ -210,8 +219,8 @@ In addition to being able to set the base url, you can also set headers and othe
 
 ```js
 ...
-import { createClient } from 'src/client';
-import ClientProvider from 'src/ClientProvider';
+
+import { createClient, ClientProvider } from '@riledupco/react-request-hook';
 ...
 
 function Root() {
@@ -227,6 +236,10 @@ function Root() {
 ### `useEndpointData`
 
 This is a hook to perform a GET request to retrieve data.
+```js
+
+import { useEndpointData } from '@riledupco/react-request-hook';
+```
 
 #### Parameters
 
@@ -245,7 +258,7 @@ This is a hook to perform a GET request to retrieve data.
 ### `<Request>`
 
 ```js
-import Request from 'src/Request';
+import { Request } from '@riledupco/react-request-hook';
 ```
 
 Request is a render prop function that takes endpoint information as params and a single function as
@@ -298,16 +311,7 @@ TODO document the props and that it's functions not urls.
 
 Work still to be done or is in progress
 
-- [ ] Need to be able to make post/delete/put calls to the backend.
-- [ ] How or should this interact with existing redux. Is redux now (with hooks and context) really
-      necessary for
-      most of the app?
-- [ ] How can I use the fact that this is built with RxJS to leverage code paths for different
-      requests and merge data together from REST calls and websockets when their domain aligns? Eg.
-      A push of an object change happens after a get call. Can the hook get the new data and update
-      state?
-- [ ] Organization. I need to put the api calls into a folder and organize them better for a cleaner
-      import mechanism.
+- [ ] Need to be able to make delete/put calls to the backend.
 - [ ] Tests. Need a lot of tests for the hooks, streams, and provider Components.
 - [ ] More documentation for the API. Need to fill out the file comments in the API code to better
       document usage and options and the different ways I think this API will be used in the app.
