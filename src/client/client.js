@@ -299,10 +299,10 @@ const client = {
    *  * See [https://github.com/axios/axios#response-schema]() for other properties sent in the
    *    request object.
    */
-  delete: async (path, data, options, instance) => {
+  delete: async (path, options, instance) => {
     const axiosInstance = instance || axios;
 
-    return makeRequest(axiosInstance.delete, path, data, options);
+    return makeRequest(axiosInstance.delete, path, options);
   },
 };
 

@@ -60,6 +60,17 @@ class WrappedClient {
   };
 
   /**
+   * Wrapps client.put by inspecting the endpoint, if it begins with http then it will  just pass
+   * the entire url directly to client with no modification, otherwise it will prepend the base
+   * url to the endpoint then call client.put().
+   *
+   * @see src/client/client.js:put for usage of this function.
+   */
+  put = (endpoint, data, options) => {
+    return client.put(endpoint, data, options, this.axiosInstance);
+  };
+
+  /**
    * Wrapps client.post by inspecting the endpoint, if it begins with http then it will  just pass
    * the entire url directly to client with no modification, otherwise it will prepend the base
    * url to the endpoint then call client.post().
@@ -68,6 +79,28 @@ class WrappedClient {
    */
   post = (endpoint, data, options) => {
     return client.post(endpoint, data, options, this.axiosInstance);
+  };
+
+  /**
+   * Wrapps client.postMultipart by inspecting the endpoint, if it begins with http then it will  just pass
+   * the entire url directly to client with no modification, otherwise it will prepend the base
+   * url to the endpoint then call client.postMultipart().
+   *
+   * @see src/client/client.js:postMultipart for usage of this function.
+   */
+  postMultipart = (endpoint, data, options) => {
+    return client.postMultipart(endpoint, data, options, this.axiosInstance);
+  };
+
+  /**
+   * Wrapps client.delete by inspecting the endpoint, if it begins with http then it will  just pass
+   * the entire url directly to client with no modification, otherwise it will prepend the base
+   * url to the endpoint then call client.delete().
+   *
+   * @see src/client/client.js:delete for usage of this function.
+   */
+  delete = (endpoint, options) => {
+    return client.delete(endpoint, options, this.axiosInstance);
   };
 }
 
