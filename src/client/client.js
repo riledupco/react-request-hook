@@ -21,6 +21,26 @@ function getStatusTextForCode(httpCode) {
 }
 
 /**
+ * Makes a request to the server by calling the axios function provided with the args provided.
+ *
+ * Returns a processes response with ok marking success or failure.
+ *
+ * @param {axios function} func The axios function to call
+ * @param  {...any} args The args to pass
+ */
+async function makeRequest(func, ...args) {
+  try {
+    const response = await func(...args);
+    return {
+      ok: true,
+      ...response,
+    };
+  } catch (error) {
+    return processError(error);
+  }
+}
+
+/**
  * Processes the Link header and splits the data into the two links
  * and returns the links in an array.
  * @param {*} response The response from the server which contains the xhr request.
@@ -159,17 +179,13 @@ const client = {
   get: async (path, options, instance) => {
     const axiosInstance = instance || axios;
 
-    try {
-      const response = await axiosInstance.get(path, options);
-      const links = processLinks(response);
-      return {
-        ok: true,
-        ...response,
-        links,
-      };
-    } catch (error) {
-      return processError(error);
+    const response = await makeRequest(axiosInstance.get, path, options);
+
+    if (response.ok) {
+      response.links = processLinks(response);
     }
+
+    return response;
   },
   /**
    * Runs a POST operation on the provided path and returns the data.
@@ -196,15 +212,7 @@ const client = {
   post: async (path, data, options, instance) => {
     const axiosInstance = instance || axios;
 
-    try {
-      const response = await axiosInstance.post(path, data, options);
-      return {
-        ok: true,
-        ...response,
-      };
-    } catch (error) {
-      return processError(error);
-    }
+    return makeRequest(axiosInstance.post, path, data, options);
   },
   /**
    * Runs a POST operation on the provided path and returns the data, but before
@@ -241,15 +249,60 @@ const client = {
     const data = new FormData();
     data.append('file', file);
 
-    try {
-      const response = await axiosInstance.post(path, data, opts);
-      return {
-        ok: true,
-        ...response,
-      };
-    } catch (error) {
-      return processError(error);
-    }
+    return makeRequest(axiosInstance.post, path, data, opts);
+  },
+  /**
+   * Runs a PUT operation on the provided path and returns the data.
+   *
+   * @param {string} path The complete URL of the endpoint to put.
+   * @param {object} data The data to put on the server.
+   * @param {object} options Options for the request. See
+   *  https://github.com/axios/axios#request-config for all valid properties that can be sent
+   *  in the options object.
+   * @param {object} options.params Key/value pairs of parameters to pass to the request.
+   * @param {object} options.headers Key/value pairs of headers to set on the request
+   * @param {axios} instance (optional) Used to pass a custom axios instance to use instead of the
+   *  global one.
+   *
+   * @return {object} With the following properties:
+   *  * {boolean} ok False if the response contains an error.
+   *  * {number} status The http status code of the response.
+   *  * {string} statusText A message if provided to describe the status response. Null if none
+   *  *               was supplied.
+   *  * {object|array} data The data from the server.
+   *  * See [https://github.com/axios/axios#response-schema]() for other properties sent in the
+   *    request object.
+   */
+  put: async (path, data, options, instance) => {
+    const axiosInstance = instance || axios;
+
+    return makeRequest(axiosInstance.put, path, data, options);
+  },
+  /**
+   * Runs a DELETE operation on the provided path and returns the data.
+   *
+   * @param {string} path The complete URL of the endpoint to DELETE.
+   * @param {object} options Options for the request. See
+   *  https://github.com/axios/axios#request-config for all valid properties that can be sent
+   *  in the options object.
+   * @param {object} options.params Key/value pairs of parameters to pass to the request.
+   * @param {object} options.headers Key/value pairs of headers to set on the request
+   * @param {axios} instance (optional) Used to pass a custom axios instance to use instead of the
+   *  global one.
+   *
+   * @return {object} With the following properties:
+   *  * {boolean} ok False if the response contains an error.
+   *  * {number} status The http status code of the response.
+   *  * {string} statusText A message if provided to describe the status response. Null if none
+   *  *               was supplied.
+   *  * {object|array} data The data from the server.
+   *  * See [https://github.com/axios/axios#response-schema]() for other properties sent in the
+   *    request object.
+   */
+  delete: async (path, data, options, instance) => {
+    const axiosInstance = instance || axios;
+
+    return makeRequest(axiosInstance.delete, path, data, options);
   },
 };
 

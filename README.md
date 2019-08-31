@@ -97,6 +97,7 @@ See [`useEndpointData`](#useEndpointData) for details on the hook parameters and
 This is base object that is used to make requests to the server. It is recommended that you do not create this object but instead use `createClient` to create a new client.
 
 Both `Request` and `useEndpointData` will also provide the client object so you can use it to make other requests to the server such as a put/post/delete.
+
 ```
 
 import client from '@riledupco/react-request-hook/client';
@@ -142,9 +143,45 @@ Return:
 
 See [https://github.com/axios/axios#response-schema]() for other properties sent in the request object..
 
+```js
+client.get('http://foo.com/test'):
+// GET http://foo.com/test
+client.get('http://foo.com/test', { params: { limit: 10 }}):
+// GET http://foo.com/test?limit=10
+client.get('http://foo.com/test', { header: { `Accept`: 'application/json' }}):
+// GET http://foo.com/test HEADERS 'Accept: application/json'
+```
+
 ##### put()
 
-Performs a PUT request to the server.
+Runs a PUT operation on the provided path and returns the data.
+
+Parameters:
+
+- `path` _(string)_ The complete URL of the endpoint to put.
+- `data` _(object)_ The data to put to the server.
+- `options` _(object)_ Options for the request. See
+  https://github.com/axios/axios#request-config for all valid properties that can be sent in the options object.
+  - `.params` _(object)_ Key/value pairs of parameters to pass to the request.
+  - `.headers` _(object)_ Key/value pairs of headers to set on the request
+- `instance` _(axios)_ (optional) Used to pass a custom axios instance to use instead of the global one.
+
+Return:
+
+- _(object)_ With the following properties:
+  - `ok` _(boolean)_ False if the response contains an error.
+  - `status` _(number)_ The http status code of the response.
+  - `statusText` _(string)_ statusText A message if provided to describe the status response. Null if none was supplied.
+  - `data` _(object|array)_ The data from the server.
+
+See [https://github.com/axios/axios#response-schema]() for other properties sent in the request object..
+
+```js
+client.put('http://foo.com/test', { foo: 'bar' }):
+// PUT http://foo.com/test '{"foo": "bar" }'
+client.put('http://foo.com/test', { foo: 'bar'}, { params: { limit: 10 }}):
+// PUT http://foo.com/test?limit=10 '{"foo": "bar" }'
+```
 
 ##### post()
 
@@ -169,6 +206,13 @@ Return:
   - `data` _(object|array)_ The data from the server.
 
 See [https://github.com/axios/axios#response-schema]() for other properties sent in the request object..
+
+```js
+client.post('http://foo.com/test', { foo: 'bar' }):
+// POST http://foo.com/test '{"foo": "bar" }'
+client.post('http://foo.com/test', { foo: 'bar'}, { params: { limit: 10 }}):
+// POST http://foo.com/test?limit=10 '{"foo": "bar" }'
+```
 
 ##### postMultipart()
 
@@ -199,16 +243,51 @@ Return:
 
 See [https://github.com/axios/axios#response-schema]() for other properties sent in the request object.
 
+```js
+client.post('http://foo.com/test', "file"):
+// POST http://foo.com/test  FormData
+client.post('http://foo.com/test', "file", { params: { limit: 10 }}):
+// POST http://foo.com/test?limit=10 FormData
+```
+
 ##### delete()
 
-Performs a DELETE request to the server.
+Runs a DELETE operation on the provided path and returns the data.
+
+Parameters:
+
+- `path` _(string)_ The complete URL of the endpoint to delete.
+- `options` _(object)_ Options for the request. See
+  https://github.com/axios/axios#request-config for all valid properties that can be sent in the options object.
+  - `.params` _(object)_ Key/value pairs of parameters to pass to the request.
+  - `.headers` _(object)_ Key/value pairs of headers to set on the request
+- `instance` _(axios)_ (optional) Used to pass a custom axios instance to use instead of the global one.
+
+Return:
+
+- _(object)_ With the following properties:
+  - `ok` _(boolean)_ False if the response contains an error.
+  - `status` _(number)_ The http status code of the response.
+  - `statusText` _(string)_ statusText A message if provided to describe the status response. Null if none was supplied.
+  - `data` _(object|array)_ The data from the server.
+
+See [https://github.com/axios/axios#response-schema]() for other properties sent in the request object..
+
+```js
+client.delete('http://foo.com/test/1'):
+// DELETE http://foo.com/test/1
+client.delete('http://foo.com/test', { params: { query: 'foo' }}):
+// DELETE http://foo.com/test?query=foo
+```
 
 ### `createClient`
 
 This function creates a new client. It's preferred over using `client` itself as you can set the base URL and headers using `createClient` where with `client` you will have to pass full URLs to every request.
 
 ```
+
 import { createClient } from '@riledupco/react-request-hook';
+
 ```
 
 ### `<ClientProvider>`
@@ -236,8 +315,8 @@ function Root() {
 ### `useEndpointData`
 
 This is a hook to perform a GET request to retrieve data.
-```js
 
+```js
 import { useEndpointData } from '@riledupco/react-request-hook';
 ```
 

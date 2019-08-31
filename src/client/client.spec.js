@@ -208,3 +208,78 @@ describe('raw client postMultipart()', () => {
     expect(response.statusText).toEqual('Internal Server Error');
   });
 });
+
+describe('raw client put()', () => {
+  /** Test data structure */
+  const data = { foo: 'foo', bar: 'bar', baz: 1 };
+
+  it('calls axios put and returns data', async () => {
+    nock('http://localhost')
+      .put('/foo', data)
+      .reply(200, { bar: 'baz' });
+    const response = await client.put('http://localhost/foo', data);
+
+    expect(response.ok).toEqual(true);
+    expect(response.data).toEqual({ bar: 'baz' });
+    // No links in post calls
+    expect(response.links).toBeUndefined();
+  });
+
+  it('responds with an error response when when an error from the server occurs', async () => {
+    nock('http://localhost')
+      .put('/404', data)
+      .reply(404, { message: 'Not Found' });
+    const response = await client.put('http://localhost/404', data);
+    expect(response.ok).toBe(false);
+    expect(response.data).toEqual({ message: 'Not Found' });
+    expect(response.status).toEqual(404);
+    expect(response.statusText).toEqual('Not Found');
+  });
+
+  it('Has statusText set to ajax error messsage when no message is in the response', async () => {
+    nock('http://localhost')
+      .put('/500', data)
+      .reply(500);
+    const response = await client.put('http://localhost/500', data);
+    expect(response.ok).toBe(false);
+    expect(response.data).toEqual('');
+    expect(response.status).toEqual(500);
+    expect(response.statusText).toEqual('Internal Server Error');
+  });
+});
+
+describe('raw client delete()', () => {
+  it('calls axios delete and returns data', async () => {
+    nock('http://localhost')
+      .delete('/foo')
+      .reply(200, { bar: 'baz' });
+    const response = await client.delete('http://localhost/foo');
+
+    expect(response.ok).toEqual(true);
+    expect(response.data).toEqual({ bar: 'baz' });
+    // No links in post calls
+    expect(response.links).toBeUndefined();
+  });
+
+  it('responds with an error response when when an error from the server occurs', async () => {
+    nock('http://localhost')
+      .delete('/404')
+      .reply(404, { message: 'Not Found' });
+    const response = await client.delete('http://localhost/404');
+    expect(response.ok).toBe(false);
+    expect(response.data).toEqual({ message: 'Not Found' });
+    expect(response.status).toEqual(404);
+    expect(response.statusText).toEqual('Not Found');
+  });
+
+  it('Has statusText set to ajax error messsage when no message is in the response', async () => {
+    nock('http://localhost')
+      .delete('/500')
+      .reply(500);
+    const response = await client.delete('http://localhost/500');
+    expect(response.ok).toBe(false);
+    expect(response.data).toEqual('');
+    expect(response.status).toEqual(500);
+    expect(response.statusText).toEqual('Internal Server Error');
+  });
+});
