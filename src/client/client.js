@@ -62,6 +62,11 @@ function processLinks(response) {
     links = rawLinks.reduce((acc, link) => {
       const matches = link.match(linkParseRegex);
 
+      // If prev link is set as previous, then make it 'prev' for consistency.
+      if (matches[2] === 'previous') {
+        matches[2] = 'prev';
+      }
+
       // Sets something like next: url, or first: url
       acc[matches[2]] = matches[1];
 

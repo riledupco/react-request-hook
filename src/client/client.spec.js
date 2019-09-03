@@ -96,10 +96,20 @@ describe('raw client get()', () => {
       expect(response.links.next).toEqual('https://example.com/foo?page=7');
     });
 
-    it('returns previous link', async () => {
+    it('returns prev link', async () => {
       nock('http://localhost')
         .get('/link/prev')
         .reply(200, {}, { Link: '<https://example.com/foo?page=5>; rel="prev"' });
+
+      const response = await client.get('/link/prev');
+
+      expect(response.links.prev).toEqual('https://example.com/foo?page=5');
+    });
+
+    it('returns previous link', async () => {
+      nock('http://localhost')
+        .get('/link/prev')
+        .reply(200, {}, { Link: '<https://example.com/foo?page=5>; rel="previous"' });
 
       const response = await client.get('/link/prev');
 
