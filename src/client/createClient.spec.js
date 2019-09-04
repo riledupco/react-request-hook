@@ -24,6 +24,35 @@ describe('createClient', () => {
     expect(client.axiosInstance.defaults.baseURL).toBe('http://localhost/api/v2');
   });
 
+  describe('getUri()', () => {
+    it('return URI for root path', () => {
+      const client = createClient('https://foo.com');
+      expect(client.getUri('/')).toEqual('https://foo.com/');
+    });
+
+    it('return URI for path', () => {
+      const client = createClient('https://foo.com');
+      expect(client.getUri('/bar')).toEqual('https://foo.com/bar');
+    });
+
+    it('return URI without leading slash', () => {
+      const client = createClient('https://foo.com');
+      expect(client.getUri('bar')).toEqual('https://foo.com/bar');
+    });
+
+    it('return URI with params', () => {
+      const client = createClient('https://foo.com');
+      const uri = client.getUri('bar', { params: { baz: 'foobar' } });
+
+      expect(uri).toEqual('https://foo.com/bar?baz=foobar');
+    });
+
+    it('return base URL for no path', () => {
+      const client = createClient('https://foo.com');
+      expect(client.getUri()).toEqual('https://foo.com/');
+    });
+  });
+
   describe('get()', () => {
     it('createdClient get creates full url from relative endpoint', async () => {
       nock('https://example.com:443')

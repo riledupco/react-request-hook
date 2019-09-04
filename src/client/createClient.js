@@ -19,11 +19,33 @@ class WrappedClient {
    * https://github.com/axios/axios#request-config for information on available options
    */
   constructor(baseURL, options = {}) {
+    this.baseURL = this.buildBaseUrl(baseURL);
     this.axiosInstance = axios.create({
-      baseURL: this.buildBaseUrl(baseURL),
+      baseURL: this.baseURL,
       ...options,
     });
   }
+
+  /**
+   * Returns the full URI for the provided path and options.
+   *
+   * Eg. getUri('/foo', { params: { bar: baz }}) => 'https://localhost/foo?bar=baz
+   *
+   * @param {string} path The endpoint path
+   * @param {object} options Options for the request. See
+   *  https://github.com/axios/axios#request-config for all valid properties that can be sent
+   *  in the options object.
+   * @param {object} options.params Params to send with the request
+   * @return {string} full URI of the endpoint. Eg. https:/foo.com/bar?baz=foobar
+   */
+  getUri = (path = '', options = {}) => {
+    const uri = this.axiosInstance.getUri({ url: path, ...options });
+    let separator = '';
+    if (!uri.startsWith('/')) {
+      separator = '/';
+    }
+    return `${this.baseURL}${separator}${uri}`;
+  };
 
   /**
    * Builds the base url. If a full domain name is passed, then returns that domain. If no value is
